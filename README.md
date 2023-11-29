@@ -17,7 +17,6 @@
 * 后端：Spring Boot、Spring Cloud Alibaba、Redis、EasyExcel、Minio、短信平台、支付宝支付等
 * 前端：Vue3、ES6、Node.js、NPM、Element Plus、ECharts等
 
-* 后端
 | 软件名称     | 版本说明 |
 | ------------ | -------- |
 | jdk          | jdk17    |
@@ -26,9 +25,6 @@
 | redis        | 7.0.10   |
 | mysql        | 8.0.30   |
 | idea         | 2022.2.2 |
-
-* 前端
-| 软件名称     | 版本说明 |
 | ------------ | -------- |
 | Vue          | Vue3     |
 | ES6          | ES6      |
