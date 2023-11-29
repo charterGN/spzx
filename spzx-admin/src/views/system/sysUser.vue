@@ -290,6 +290,13 @@ const searchSysUser = ()=>{
     fetchData()
 }
 
+//重置方法
+const resetData = () => {
+    queryDto.value = { keyword: '', createTimeBegin: '', createTimeEnd: '' }
+    createTimes.value = []
+    fetchData()
+}
+
 </script>
 
 <style scoped>

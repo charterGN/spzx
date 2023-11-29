@@ -246,6 +246,13 @@ const fetchData = async ()=>{
 const searchSysRole = ()=>{
     fetchData()
 }
+
+//重置方法
+const resetData = () => {
+    queryDto.value.roleName = ''
+    fetchData()
+}
+
 </script>
 
 <style scoped>
