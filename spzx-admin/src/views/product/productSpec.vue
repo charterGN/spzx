@@ -9,7 +9,7 @@
         <div
             v-for="(item1, index1) in scope.row.specValue"
             :key="index1"
-            style="padding: 5px; margin: 0;width: 100%;"
+            style="padding: 5px; margin: 0;width: 120%;"
         >
             {{ item1.key }}：
             <span
