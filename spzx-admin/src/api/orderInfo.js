@@ -19,3 +19,11 @@ export const GetOrderInfoByPage = (current,limit,queryDto) => {
     params: queryDto, //其他参数
   })
 }
+
+//获取订单item信息
+export const GetOrderItem = (orderId) => {
+  return request({
+    url: `${base_api}/getOrderItem/${orderId}`, //路径
+    method: 'get', //提交方式
+  })
+}

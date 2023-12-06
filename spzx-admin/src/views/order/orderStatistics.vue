@@ -22,10 +22,10 @@
                     style="width: 100%"
                   >
                     <el-option
-                      v-for="item in orderResVo"
-                      :key="item.id"
-                      :label="item.status"
-                      :value="item.id"
+                      v-for="value, key in orderStatusMap"
+                      :key="key"
+                      :label="value"
+                      :value="key"
                     />
                   </el-select>
                 </el-form-item>
@@ -70,10 +70,10 @@
                     style="width: 100%"
                   >
                     <el-option
-                      v-for="item in orderResVo"
-                      :key="item.id"
-                      :label="item.payType"
-                      :value="item.id"
+                      v-for="value, key in orderPayType"
+                      :key="key"
+                      :label="value"
+                      :value="key"
                     />
                   </el-select>
                 </el-form-item>
@@ -88,7 +88,7 @@
       </el-form>
   </div>
 
-  <el-dialog v-model="dialogVisible" title="详情" width="60%">
+  <el-dialog v-model="dialogVisible" title="详情" width="50%" >
     <span>订单基本信息</span>
     <el-divider role="separator" style="--el-border-style: solid;"/>
 
@@ -205,7 +205,16 @@
       <el-divider role="separator" style="--el-border-style: solid;"/>
       <span>订单具体信息</span>
       <el-divider role="separator" style="--el-border-style: solid;"/>
-
+      <el-table :data="itemList" style="width: 100%">
+          <el-table-column prop="skuName" label="SKU名称" />
+          <el-table-column prop="thumbImg" label="商品图片" #default="scope" >
+            <img :src="scope.row.thumbImg" width="50" />
+          </el-table-column>
+          <el-table-column prop="skuPrice" label="SKU价格" />
+          <el-table-column prop="skuNum" label="购买数量" />
+      </el-table>
+      <br/>
+      <el-button type="button" style="margin-left: 40%;" @click="closeDetial()">关闭</el-button>
   </el-dialog>
 
   <!---数据表格-->
@@ -243,7 +252,7 @@
 
 <script setup>
 import { ref,onMounted } from 'vue'; 
-import { GetOrderInfoByPage } from '@/api/orderInfo.js'
+import { GetOrderInfoByPage , GetOrderItem } from '@/api/orderInfo.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 ///////////////////
 // 映射关系表
@@ -255,7 +264,7 @@ const orderStatusMap = {
   "0": '待付款',
   "1": '待发货',
   "2": '已发货',
-  "3": '待用户收货，已完成',
+  "3": '待收货',
   "-1": '已取消'
 }
 
@@ -268,9 +277,12 @@ const getOrderPayTypeText = (type) => {
 }
 
 ///////////////
+//item数据
+const itemList = ref([])
 const dialogVisible = ref(false)
 
 const form = {
+  id: '',
   title:"",
   operName:"",
   requestMethod:"",
@@ -285,9 +297,21 @@ const form = {
 
 const orderInfo = ref(form)
 
-const showDetial = (row) =>{
+const showDetial = (row) => {
   orderInfo.value = {...row}
+  showOrderItem(orderInfo.value.id)
   dialogVisible.value = true
+}
+
+const closeDetial = () => {
+  dialogVisible.value = false
+}
+
+//查询orderItem
+const showOrderItem = async (id) => {
+  const { data } = await GetOrderItem(id)
+  itemList.value = data
+  console.log(data)
 }
 
 ///////////////订单详情列表

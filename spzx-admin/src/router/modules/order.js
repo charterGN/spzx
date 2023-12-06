@@ -16,7 +16,7 @@ export default [
             name: 'orderStatistics',
             component: orderStatistics,
             meta: {
-                title: '订单统计',
+                title: '订单管理',
             },
             }
         ],
