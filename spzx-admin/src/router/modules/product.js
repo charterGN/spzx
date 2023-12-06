@@ -36,7 +36,7 @@ export default [
         name: 'categoryBrand',
         component: categoryBrand,
         meta: {
-          title: '分类品牌',
+          title: '品牌分类',
         },
       },
       {
