@@ -1,5 +1,5 @@
 const Layout = () => import('@/layout/index.vue')
-const orderStatistics = () => import('@/views/order/orderStatistics.vue')
+const orderInfo = () => import('@/views/order/orderInfo.vue')
 
 export default [
     {
@@ -12,9 +12,9 @@ export default [
       icon: 'Operation',
       children: [
             {
-            path: '/orderStatistics',
-            name: 'orderStatistics',
-            component: orderStatistics,
+            path: '/orderInfo',
+            name: 'orderInfo',
+            component: orderInfo,
             meta: {
                 title: '订单管理',
             },
