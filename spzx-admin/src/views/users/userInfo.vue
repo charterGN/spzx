@@ -34,40 +34,93 @@
         </el-form>
     </div>
 
-    <!-- <el-dialog v-model="dialogVisible" title="详情" width="40%">
-        <el-form label-width="120px">
-            <el-form-item label="用户名">
-                <el-input v-model="sysUser.userName"/>
+    <el-dialog v-model="dialogVisible" title="详情" width="60%">
+      <el-form label-width="150px">
+        <el-divider role="separator" style="--el-border-style: solid;"/>
+            <span>基本信息</span>
+        <el-divider role="separator" style="--el-border-style: solid;"/>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="头像：" >
+                <img :src="userInfo.avatar" width="50" />
             </el-form-item>
-            <el-form-item v-if="sysUser.id == null" label="密码">
-                <el-input type="password" show-password v-model="sysUser.password"/>
+          </el-col>
+          <el-col :span="12" >
+            <el-form-item label="用户名：" width="120" >
+              <span>{{ userInfo.username }}</span>
             </el-form-item>
-            <el-form-item label="姓名">
-                <el-input v-model="sysUser.name"/>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="昵称：" >
+                <span>{{ userInfo.nickName }}</span>
             </el-form-item>
-            <el-form-item label="手机">
-                <el-input v-model="sysUser.phone"/>
+          </el-col>
+          <el-col :span="12" >
+            <el-form-item label="性别：" width="120" >
+              <span>{{ userInfo.sex == 0 ? '男' : '女' }}</span>
             </el-form-item>
-            <el-form-item label="头像">
-                <el-upload
-                            class="avatar-uploader"
-                            action="http://localhost:8501/admin/system/fileUpload"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :headers="headers"
-                    >
-                    <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
-                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-                </el-upload>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="电话号码：" width="120">
+                <span>{{ userInfo.phone }}</span>
             </el-form-item>
-            <el-form-item label="描述">
-                <el-input  v-model="sysUser.description"/>
+          </el-col>
+          <el-col :span="12" >
+            <el-form-item label="备注：" width="120" >
+              <span>{{ userInfo.memo == null ? '无' : userInfo.memo }}</span>
             </el-form-item>
-            <el-form-item>
-                <el-button @click="dialogVisible = false">取消</el-button>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="最后一次登录IP：" width="120">
+                <span>{{ userInfo.lastLoginIp }}</span>
             </el-form-item>
-        </el-form>
-    </el-dialog> -->
+          </el-col>
+          <el-col :span="12" >
+            <el-form-item label="状态："  >
+              <span>{{ userInfo.status == 1 ? '正常' : '停用' }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="最后一次登录时间：" width="120">
+                <span>{{ userInfo.lastLoginTime }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" >
+            <el-form-item label="创建时间：" width="120" >
+              <span>{{ userInfo.createTime }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-divider role="separator" style="--el-border-style: solid;"/>
+            <span>地址信息</span>
+        <el-divider role="separator" style="--el-border-style: solid;"/>
+
+        <el-table :data="addressList" style="width: 100%">
+          <el-table-column prop="fullAddress" label="详细地址" width="260" />
+          <el-table-column prop="tagName" label="地址标签" />
+          <el-table-column prop="isDefault" label="是否默认地址" #default="scope">
+            {{ scope.row.isDefault == 1 ? '是' : '否' }}
+          </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" width="180" />
+        </el-table>
+        <br/>
+        <el-button type="button" style="margin-left: 45%;" @click="closeDetial()">关闭</el-button>
+      </el-form>
+    </el-dialog>
 
     <!---数据表格-->
     <el-table :data="list" style="width: 100%">
@@ -89,8 +142,11 @@
             <el-button type="primary" size="small" @click="showDetail(scope.row)">
                 详情
             </el-button>
-            <el-button type="danger" size="small" @click="updateStatus(scope.row)">
-                停用
+            <el-button 
+                :type="scope.row.status === 1 ? 'danger' : 'warning'" 
+                size="small" 
+                @click="alterStatus(scope.row)">
+                {{ scope.row.status == 1 ? '停用' : '激活' }}
             </el-button>
         </el-table-column>
     </el-table>
@@ -108,25 +164,33 @@
 
 <script setup>
 import { ref,onMounted } from 'vue'; 
-import { getPageList } from '@/api/userInfo'
-
+import { getPageList, findUserAddressByUserId, updateStatus } from '@/api/userInfo.js'
+import { ElMessage, ElMessageBox } from 'element-plus'
 ///////////////会员停用
-// const deleteById = (row)=>{
-//     ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
-//         confirmButtonText: '确定',
-//         cancelButtonText: '取消',
-//         type: 'warning',
-//     }).then(async () => {
-//        const {code} = await DeleteSysUser(row.id)
-//        if(code === 200) {
-//             ElMessage.success("操作成功")
-//             fetchData()
-//        }
-//     })
-// }
+const alterStatus = async (row)=>{
+    let confirmation = true;
 
-///////////////会员展示
+    if (row.status === 1) {
+        confirmation = await ElMessageBox.confirm('是否停用此账号?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        });
+    }
+
+    if (confirmation) {
+        const { code } = await updateStatus(row.id, row.status);
+
+        if (code === 200) {
+        ElMessage.success("操作成功");
+        fetchData();
+        }
+    }
+}
+
+///////////////会员详情展示
 const dialogVisible = ref(false)
+const addressList = ref([])
 
 const form = {
     id: '',
@@ -142,8 +206,20 @@ const form = {
     lastLoginIp: '',
     lastLoginTime: '',
     status: '',
+    createTime: ''
 }
 const userInfo = ref(form)
+
+const showDetail = (row) => {
+    userInfo.value = {...row}
+    showAddress(row.id)
+    dialogVisible.value = true
+}
+
+const showAddress = async (userId) => {
+    const { data } = await findUserAddressByUserId(userId)
+    addressList.value = data
+}
 
 ///////////////用户列表
 // 表格数据模型
@@ -200,6 +276,9 @@ const resetData = () => {
     fetchData()
 }
 
+const closeDetial = () => {
+    dialogVisible.value = false
+}
 </script>
 
 <style scoped>

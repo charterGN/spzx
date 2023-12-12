@@ -88,6 +88,7 @@
                 <span>{{ sysOperLog.createTime }}</span>
             </el-form-item>
         </el-form>
+        <el-button type="button" style="margin-left: 45%;" @click="closeDetial()">关闭</el-button>
     </el-dialog>
 
     <!---数据表格-->
@@ -203,6 +204,9 @@ const resetData = () => {
     fetchData()
 }
 
+const closeDetial = () => {
+  dialogVisible.value = false
+}
 </script>
 
 <style scoped>

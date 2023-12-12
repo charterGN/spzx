@@ -11,7 +11,7 @@ export const getPageList = (page, limit, searchObj) => {
   })
 }
 
-// 获取用户地址
+// 获取会员地址
 export const findUserAddressByUserId = userId => {
   return request({
     url: `${api_name}/findUserAddressByUserId/${userId}`,
@@ -19,9 +19,10 @@ export const findUserAddressByUserId = userId => {
   })
 }
 
+//更新会员账户状态
 export const updateStatus = (userId, status) => {
   return request({
-    url: `${api_name}/updateStatus/${userId}/{status}`,
-    method: 'get',
+    url: `${api_name}/updateStatus/${userId}/${status}`,
+    method: 'put',
   })
 }

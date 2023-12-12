@@ -105,9 +105,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
 
-      <el-form label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="优惠卷：" >
@@ -120,9 +118,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
 
-      <el-form label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="运费：" >
@@ -135,9 +131,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
 
-      <el-form label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="订单状态：" >
@@ -150,9 +144,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
 
-      <el-form label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="支付时间：" >
@@ -185,9 +177,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
 
-      <el-form label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="地址标签：" >
@@ -253,7 +243,7 @@
 <script setup>
 import { ref,onMounted } from 'vue'; 
 import { GetOrderInfoByPage , GetOrderItem } from '@/api/orderInfo.js'
-import { ElMessage, ElMessageBox } from 'element-plus'
+
 ///////////////////
 // 映射关系表
 const orderPayType = {
@@ -311,7 +301,6 @@ const closeDetial = () => {
 const showOrderItem = async (id) => {
   const { data } = await GetOrderItem(id)
   itemList.value = data
-  console.log(data)
 }
 
 ///////////////订单详情列表
