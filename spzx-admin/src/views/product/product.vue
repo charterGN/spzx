@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="search-div">
     <el-form label-width="70px" size="small">
       <el-row>
@@ -74,14 +75,10 @@
                 : '下架'
             }}
         </el-table-column>
-        <el-table-column prop="auditStatus" label="审核状态" #default="scope">
-            {{
-                scope.row.auditStatus == 0
-                ? '未审核'
-                : scope.row.auditStatus == 1
-                ? '通过'
-                : '驳回'
-            }}
+        <el-table-column prop="auditStatus" label="审核状态" align="center" #default="scope">
+          <span v-if="scope.row.auditStatus == 0">未审核</span>
+          <span v-else-if="scope.row.auditStatus == 1" style="color: green;">通过</span>
+          <span v-else style="color: red;">驳回</span>
         </el-table-column>
         <el-table-column label="操作" align="center" width="200" #default="scope" >
             <el-button type="primary" size="small" @click="editShow(scope.row)" style="padding: 5px; margin-left: 5px;">
@@ -396,7 +393,7 @@
       </el-form-item>
     </el-form>
   </el-dialog>
-
+  </div>
 </template>
 
 <script setup>

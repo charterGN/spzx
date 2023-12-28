@@ -94,14 +94,15 @@
     <!---数据表格-->
     <el-table :data="list" style="width: 100%">
         <el-table-column prop="title" label="系统模块" />
-        <el-table-column prop="requestMethod" label="请求方式" />
+        <el-table-column prop="requestMethod" label="请求方式" width="100"/>
         <el-table-column prop="operName" label="操作人员" />
         <el-table-column prop="operIp" label="操作IP" />
         <el-table-column prop="method" label="请求方法" />
-        <el-table-column prop="status" label="操作状态" #default="scope">
-            {{ scope.row.status == 0 ? '正常' : '异常' }}
+        <el-table-column prop="status" label="操作状态" align="center" width="90" #default="scope">
+            <span v-if="scope.row.status == 0" style="color: green;">正常</span>
+            <span v-else style="color: red; font-weight: bold;">异常</span>
         </el-table-column>
-        <el-table-column prop="createTime" label="操作时间" />
+        <el-table-column prop="createTime" label="操作时间" width="180" />
         <el-table-column label="操作" align="center" width="90" #default="scope">
             <el-button type="primary" size="small" @click="showDetial(scope.row)">
                 详情
@@ -204,6 +205,7 @@ const resetData = () => {
     fetchData()
 }
 
+//关闭详情
 const closeDetial = () => {
   dialogVisible.value = false
 }

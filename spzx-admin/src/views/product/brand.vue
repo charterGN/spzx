@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="tools-div">
         <el-button type="success" size="small" @click="addShow">添 加</el-button>
     </div>
@@ -52,7 +53,7 @@
                @size-change="handleSizeChange"
                @current-change="handleCurrentChange"
                />
-
+  </div>
 </template>
 
 <script setup>

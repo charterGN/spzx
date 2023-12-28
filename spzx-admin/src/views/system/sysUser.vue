@@ -84,11 +84,12 @@
             <img :src="scope.row.avatar" width="50" />
         </el-table-column>
         <el-table-column prop="description" label="描述" />
-        <el-table-column prop="status" label="状态" #default="scope">
-            {{ scope.row.status == 1 ? '正常' : '停用' }}
+        <el-table-column prop="status" label="状态" width="90" #default="scope">
+            <span v-if="scope.row.status == 1" style="color: green;">正常</span>
+            <span v-else style="color: red; font-weight: bold;">停用</span>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column label="操作" align="center" width="280" #default="scope">
+        <el-table-column prop="createTime" label="创建时间" width="100" />
+        <el-table-column label="操作" align="center" width="260" #default="scope">
             <el-button type="primary" size="small" @click="editSysUser(scope.row)">
                 修改
             </el-button>

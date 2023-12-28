@@ -135,7 +135,8 @@
         <el-table-column prop="phone" label="电话号码" width="120"/>
         <el-table-column prop="lastLoginTime" label="最后一次登录时间" width="160" />
         <el-table-column prop="status" label="状态" #default="scope">
-            {{ scope.row.status == 1 ? '正常' : '停用' }}
+          <span v-if="scope.row.status == 1">正常</span>
+          <span v-else style="color: red;">停用</span>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="160" />
         <el-table-column label="操作" align="center" width="150" #default="scope">

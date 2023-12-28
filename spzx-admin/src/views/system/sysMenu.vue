@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="tools-div">
         <el-button type="success" size="small" @click="addShow">添 加</el-button>
     </div>
@@ -37,7 +38,8 @@
     <el-table-column prop="component" label="路由名称" />
     <el-table-column prop="sortValue" label="排序" />
     <el-table-column prop="status" label="状态" #default="scope">
-      {{ scope.row.status == 1 ? '正常' : '停用' }}
+      <span v-if="scope.row.status == 1">正常</span>
+      <span v-else style="color: red;">停用</span>
     </el-table-column>
     <el-table-column prop="createTime" label="创建时间" />
 
@@ -53,6 +55,7 @@
         </el-button>
     </el-table-column>
   </el-table>
+  </div>
 </template>
 
 <script setup>
