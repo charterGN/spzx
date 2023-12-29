@@ -1,12 +1,17 @@
-一、打包前端项目
+## 一、打包前端项目
+
     1. 通过项目中的package.json文件，找到“build”运行进行打包
         npm run build
-    2. 打包成功后生成dist文件夹，就是打包好的项目
+       2. 打包成功后生成dist文件夹，就是打包好的项目
+       3. 在根目录中创建一个docker文件夹中创建nginx.conf配置文件, 同时在根目录中创建一个Dockerfile文件
 
-    3. 在根目录中创建一个docker文件夹中创建nginx.conf配置文件, 同时在根目录中创建一个Dockerfile文件
+ 
 
-nginx.conf内容：
-----------------------------------------------------
+------
+
+**nginx.conf内容：**
+
+```nginx
 server {
     listen 80;
 
@@ -17,14 +22,14 @@ server {
     gzip_types text/plain text/css text/javascript application/json application/javascript application/x-javascript application/xml;
     gzip_vary on;
     gzip_disable "MSIE [1-6]\.";
-    
+
     root /usr/share/nginx/html;
     include /etc/nginx/mime.types;
     location / {
         try_files $uri /index.html;
     }
 }
---------------------------------------------------------
+```
 以下是说明：
 1）gzip on; - 启用Gzip压缩功能。
 
@@ -37,11 +42,12 @@ server {
 5） gzip_vary on; - 在HTTP响应头中添加Vary标头，以通知缓存服务器根据Accept-Encoding头来提供正确的压缩版本。
 
 6） gzip_disable "MSIE [1-6]\.”; - 禁用特定的浏览器压缩。在这个例子中，它禁用了Internet Explorer 1至6版本的Gzip压缩。这是因为早期版本的IE在处理Gzip压缩时可能存在兼容性问题。
----------------------------------------------------
 
+------
 
-Dockerfile内容：
----------------------------------------------------
+**Dockerfile内容：**
+
+```dockerfile
 FROM nginx
 
 WORKDIR /usr/share/nginx/html/
@@ -54,7 +60,8 @@ COPY ./dist  /usr/share/nginx/html/
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
-----------------------------------------------------
+```
+
 以下是说明：
 1）FROM nginx: 安装nginx
 
@@ -65,36 +72,44 @@ CMD ["nginx", "-g", "daemon off;"]
 4）EXPOSE：声明容器内的服务将监听的端口(指令仅仅是一种文档化的操作，它并不会自动在容器启动时打开这些端口或配置网络连接)
 
 5）CMD 指定容器启动时要执行的默认命令或可执行文件的指令
------------------------------------------------------------
 
-4.压缩文件为了上传到服务器
-把三个文件或文件夹，压缩成一个压缩包。
-    -- dist文件夹
-    -- docker文件夹        ==>  压缩为spzx-admin.zip 
-    -- Dockerfile文件
+------
 
-===================================================
+4. 压缩文件为了上传到服务器
+   把三个文件或文件夹，压缩成一个压缩包。
+       -- dist文件夹
+       -- docker文件夹        ==>  压缩为spzx-admin.zip 
+       -- Dockerfile文件
 
-二、服务器项目上线
-1.docker安装
+------
 
-2.压缩包上传到服务器
-把打包好的spzx-admin.zip上传到服务器的指定目录,这里以/root/myapp目录为例
+## 二、服务器项目上线
 
-    1.创建myapp目录
+1. docker安装
 
-    mkdir /root/myapp 
 
-    2.把压缩包放在目录里
 
-    3.进到myapp文件夹,解压文件
-    unzip spzx-admin.zip -d spzx-admin
+2. 压缩包上传到服务器
+   把打包好的spzx-admin.zip上传到服务器的指定目录，这里以/root/myapp目录为例：
 
-    4.进入user-center-frontend文件夹执行命令,后面"."不要忽略
-    docker build -t app-manager-front:1.1.0 .
-    docker build -t 镜像名称:版本号 .
+```tex
+1.创建myapp目录
 
-    5.运行docker镜像
+mkdir /root/myapp 
+
+2.把压缩包放在目录里
+
+3.进到myapp文件夹,解压文件
+unzip spzx-admin.zip -d spzx-admin
+
+4.进入user-center-frontend文件夹执行命令,后面"."不要忽略
+docker build -t app-manager-front:1.1.0 .
+docker build -t 镜像名称:版本号 .
+
+5.运行docker镜像
+```
+
+
 
 ===================================================
 
