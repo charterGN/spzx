@@ -1,11 +1,10 @@
 ## 一、打包前端项目
 
-    1. 通过项目中的package.json文件，找到“build”运行进行打包
-        npm run build
-       2. 打包成功后生成dist文件夹，就是打包好的项目
-       3. 在根目录中创建一个docker文件夹中创建nginx.conf配置文件, 同时在根目录中创建一个Dockerfile文件
+1. 通过项目中的package.json文件，找到“build”运行进行打包
+   npm run build
+2. 打包成功后生成dist文件夹，就是打包好的项目
+3. 在根目录中创建一个docker文件夹中创建nginx.conf配置文件, 同时在根目录中创建一个Dockerfile文件
 
- 
 
 ------
 
@@ -77,9 +76,14 @@ CMD ["nginx", "-g", "daemon off;"]
 
 4. 压缩文件为了上传到服务器
    把三个文件或文件夹，压缩成一个压缩包。
+   
+   ```
        -- dist文件夹
        -- docker文件夹        ==>  压缩为spzx-admin.zip 
        -- Dockerfile文件
+   ```
+   
+   
 
 ------
 
